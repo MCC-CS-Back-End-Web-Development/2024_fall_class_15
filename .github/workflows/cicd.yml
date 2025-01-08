@@ -20,3 +20,11 @@ jobs:
         run: |
           chmod 777 gradlew
           ./gradlew clean build
+      - name: Docker Login
+        run: |
+          docker login -u ${{secrets.DOCKER_USERNAME}} -p {{secrets.DOCKER_PASSWORD}}
+      - name: Docker Build
+        run: |
+          docker build -t estohlmann/mcc-codeschool .
+      - name: Push Image
+        run: docker push estohlmann/mcc-codeschool:latest

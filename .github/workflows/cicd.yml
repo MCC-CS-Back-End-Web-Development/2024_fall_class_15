@@ -28,3 +28,17 @@ jobs:
           docker build -t estohlmann/mcc-codeschool .
       - name: Push Image
         run: docker push estohlmann/mcc-codeschool:latest
+
+  deploy:
+    needs: build
+    runs-on: [ec2-runner]
+    steps:
+      - name: Pull Docker Image
+        run: |
+          sudo docker pull estohlmann/mcc-codeschool:latest
+      - name: Remove Container
+        run: |
+          sudo docker rm -f tic-tac-toe
+      - name: Run Docker Container
+        run: |
+          sudo docker run -d -p 8080:8080 --name tic-tac-toe estohlmann/mcc-codeschool:latest
